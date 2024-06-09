@@ -1,4 +1,9 @@
+import os
+from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
+
+# Explicitly load the .env file
+load_dotenv()
 
 
 class Settings(BaseSettings):
@@ -8,7 +13,8 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int
 
     class Config:
-        env_file = ".env"
+        env_file = "../.env"
 
 
 settings = Settings()
+
