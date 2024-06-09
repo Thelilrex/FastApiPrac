@@ -1,6 +1,8 @@
 import datetime
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
-from database import Base
+from sqlalchemy.orm import declarative_base
+
+Base = declarative_base()
 
 
 class NewsLetterSubscriptionDB(Base):
