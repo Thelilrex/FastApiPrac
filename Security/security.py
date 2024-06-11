@@ -3,9 +3,8 @@ from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.testing import db
-
 from Data.users_Schema import TokenData
-from Data.scheduler import User
+from Data.scheduler import UserDB as User
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
