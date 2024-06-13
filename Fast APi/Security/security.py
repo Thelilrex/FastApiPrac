@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Optional, Annotated
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.testing import db
@@ -64,6 +64,13 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
         return user
     except JWTError:
         raise credentials_exception
+
+
+user_dependency = Annotated[dict, Depends(get_current_user)]
+
+
+def get_user(db, username: str):
+    return db.query(User).filter(User.username == username).first()
 
 
 async def get_current_active_user(current_user: User = Depends(get_current_user)):

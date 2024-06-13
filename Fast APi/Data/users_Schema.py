@@ -31,3 +31,18 @@ class User(UserBase):
 
 class Config:
     orm_mode = True
+
+
+class TodoCreate(BaseModel):
+    title: str
+    description: str
+
+
+class TodoInDB(TodoCreate):
+    owner_id: int
+
+
+class TodoGet(BaseModel):
+    id: int
+    title: str
+    description: str
