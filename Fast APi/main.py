@@ -2,12 +2,14 @@ from typing import Annotated, List
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
+from starlette.middleware.cors import CORSMiddleware
+
 from Data import scheduler
 from Data.database import engine, get_db
 from Data.scheduler import ContactFormDB, Todo, UserDB
 from Data.schemas import ContactForm, NewsLetterSubscription
-from Data.users_Schema import UserCreate, TodoGet, TodoCreate, Token, User
-from Security.security import get_password_hash, authenticate_user, user_dependency, create_access_token, get_user
+from Data.users_Schema import UserCreate, TodoGet, TodoCreate, Token
+from Security.security import get_password_hash, authenticate_user, user_dependency, create_access_token
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,6 +20,13 @@ scheduler.Base.metadata.create_all(bind=engine)
 db_dependency = Annotated[Session, Depends(get_db)]
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8081"],  # Adjust this to your frontend URL in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 @app.post(f"/contact/")
 def create_a_contact(contact: ContactForm, db: db_dependency):
     db_contact = ContactFormDB(email=contact.email, name=contact.name, subject=contact.subject, message=contact.message)
