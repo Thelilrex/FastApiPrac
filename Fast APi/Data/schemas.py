@@ -1,9 +1,9 @@
 # Schemas
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class NewsLetterSubscription(BaseModel):
-    email: str
+    email: EmailStr
     language: str
     name: str
     privacyConsentCheck: bool
@@ -11,7 +11,7 @@ class NewsLetterSubscription(BaseModel):
 
 
 class ContactForm(BaseModel):
-    email: str
+    email: EmailStr
     name: str
     subject: str
     message: str

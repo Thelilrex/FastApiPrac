@@ -13,7 +13,7 @@ class NewsLetterSubscriptionDB(Base):
     name = Column(String)
     consent = Column(Boolean)
     status = Column(String)
-    received = Column(DateTime, default=datetime.datetime.utcnow)
+    received = Column(DateTime, default=datetime.datetime.now())
 
 
 class ContactFormDB(Base):
@@ -23,7 +23,7 @@ class ContactFormDB(Base):
     email = Column(String)
     subject = Column(String)
     message = Column(String)
-    received = Column(DateTime, default=datetime.datetime.utcnow)
+    received = Column(DateTime, default=datetime.datetime.now())
 
 
 class UserDB(Base):

@@ -1,32 +1,33 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import UserRegister from '../components/UserRegister.vue';
-import UserLogin from '../components/UserLogin.vue';
-import TodoList from '../components/ToDoList.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+import { useAuthStore } from '../components/stores/auth.ts';
 
-Vue.use(Router);
+// Define your route components
+const UserRegister = () => import('../components/pages/UserRegister.vue');
+const UserLogin = () => import('../components/pages/UserLogin.vue');
+const ToDoList = () => import('../components/pages/ToDoList.vue');
 
 const routes = [
-  {
-    path: '/register',
-    name: 'UserRegister',
-    component: UserRegister
-  },
-  {
-    path: '/login',
-    name: 'UserLogin',
-    component: UserLogin
-  },
-  {
-    path: '/todos',
-    name: 'TodoList',
-    component: TodoList
-  }
+    { path: '/', component: UserRegister },
+    { path: '/login', component: UserLogin },
+    {
+        path: '/dashboard',
+        component: ToDoList,
+        meta: { requiresAuth: true },
+    },
 ];
 
-const router = new Router({
-  mode: 'history',
-  routes
+const router = createRouter({
+    history: createWebHistory(),
+    routes,
+});
+
+router.beforeEach((to, from, next) => {
+    const authStore = useAuthStore();
+    if (to.meta.requiresAuth && !authStore.token) {
+        next('/login');
+    } else {
+        next();
+    }
 });
 
 export default router;
