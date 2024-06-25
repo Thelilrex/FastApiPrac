@@ -11,7 +11,7 @@ from Data.scheduler import ContactFormDB, Todo, UserDB
 from Data.schemas import ContactForm, NewsLetterSubscription
 from Data.users_Schema import UserCreate, TodoGet, TodoCreate, Token
 from Security.security import get_password_hash, authenticate_user, user_dependency, create_access_token, \
-    ACCESS_TOKEN_EXPIRE_MINUTES
+    ACCESS_TOKEN_EXPIRE_MINUTES, get_current_user
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,7 +21,6 @@ scheduler.Base.metadata.create_all(bind=engine)
 
 db_dependency = Annotated[Session, Depends(get_db)]
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:8081"],  # Adjust this to your frontend URL in production
@@ -29,6 +28,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 @app.post(f"/contact/")
 def create_a_contact(contact: ContactForm, db: db_dependency):
     db_contact = ContactFormDB(email=contact.email, name=contact.name, subject=contact.subject, message=contact.message)
@@ -89,7 +90,7 @@ def register(user: UserCreate, db: db_dependency):
 
 
 @app.post("/token", response_model=Token)
-def login_for_access_token(db: db_dependency, form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(db: db_dependency, form_data: OAuth2PasswordRequestForm = Depends()):
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -97,13 +98,13 @@ def login_for_access_token(db: db_dependency, form_data: OAuth2PasswordRequestFo
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token_expires = timedelta(minutes= ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": user.username}, expires_delta= access_token_expires)
-    return {"access_token": access_token, "token_type": "bearer"}
+
+    access_token = create_access_token(data={"sub": user.username})
+    return Token(access_token=access_token, token_type="bearer")
 
 
-@app.get("/users/me/", response_model=UserCreate)
-def read_users_me(current_user: user_dependency):
+@app.get("/users/me/")
+def read_users_me(current_user: UserCreate = Depends(get_current_user)):
     return current_user
 
 
