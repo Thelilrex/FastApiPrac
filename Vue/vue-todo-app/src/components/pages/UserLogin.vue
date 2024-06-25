@@ -15,9 +15,9 @@
     </div>
   </template>
 
-<script lang="ts">
+<script lang="js">
 import { defineComponent, ref } from 'vue';
-import { useAuthStore } from '../stores/auth.ts';
+import useAuthStore from '../stores/auth.js';
 
 export default defineComponent({
     setup() {

@@ -1,5 +1,5 @@
+import useAuthStore from '../components/stores/auth.js';
 import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '../components/stores/auth.ts';
 
 // Define your route components
 const UserRegister = () => import('../components/pages/UserRegister.vue');
@@ -30,4 +30,4 @@ router.beforeEach((to, from, next) => {
     }
 });
 
-export default router;
+export {router};

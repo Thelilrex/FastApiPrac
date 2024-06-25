@@ -10,12 +10,15 @@ module.exports = {
     extensions: ['.ts', '.js'],  // Resolve both TypeScript and JavaScript files
   },
   module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
+  rules: [
+    {
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: {
+        loader: 'babel-loader',
+          },
+        },
     ],
-  },
+    },
+
 };

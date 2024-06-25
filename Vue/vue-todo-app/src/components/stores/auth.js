@@ -1,19 +1,14 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import router from '@/router';
+import { router } from '@/router';
 
-interface AuthState {
-    token: string | null;
-    user: object | null;
-}
-
-export const useAuthStore = defineStore('auth', {
-    state: (): AuthState => ({
+const useAuthStore = defineStore('auth', {
+    state: () => ({
         token: null,
         user: null,
     }),
     actions: {
-        async login(username: string, password: string) {
+        async login(username, password) {
             try {
                 const response = await axios.post('/token', { username, password });
                 this.token = response.data.access_token;
@@ -41,3 +36,5 @@ export const useAuthStore = defineStore('auth', {
         }
     }
 });
+
+export default useAuthStore;
