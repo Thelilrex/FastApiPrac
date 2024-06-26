@@ -2,12 +2,14 @@ import useAuthStore from '../components/stores/auth.js';
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Define your route components
+const HomePage = () => import('../components/pages/HelloWorld.vue')
 const UserRegister = () => import('../components/pages/UserRegister.vue');
 const UserLogin = () => import('../components/pages/UserLogin.vue');
 const ToDoList = () => import('../components/pages/ToDoList.vue');
 
 const routes = [
-    { path: '/', component: UserRegister },
+    { path: '/', component: HomePage },
+    { path: '/registration', component: UserRegister },
     { path: '/login', component: UserLogin },
     {
         path: '/dashboard',

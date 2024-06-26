@@ -20,15 +20,22 @@ app = FastAPI()
 scheduler.Base.metadata.create_all(bind=engine)
 
 db_dependency = Annotated[Session, Depends(get_db)]
-
+origins = [
+    "http://192.168.0.13:8081",  # Your Vue.js frontend URL
+    "http://localhost:8081",    # Another example if you are using a different setup
+]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8081"],  # Adjust this to your frontend URL in production
+    allow_origins=origins,  # Adjust this to your frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+@app.get("/")
+def read_data():
+    return {"message": "Hello from FastAPI!"}
 
 @app.post(f"/contact/")
 def create_a_contact(contact: ContactForm, db: db_dependency):

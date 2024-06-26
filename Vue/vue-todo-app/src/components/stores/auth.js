@@ -10,7 +10,7 @@ const useAuthStore = defineStore('auth', {
     actions: {
         async login(username, password) {
             try {
-                const response = await axios.post('/token', { username, password });
+                const response = await axios.post('http://localhost:8000/token', { username, password });
                 this.token = response.data.access_token;
                 axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`;
                 await this.fetchUser();
